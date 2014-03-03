@@ -16,16 +16,17 @@ describe "AuthenticationPages" do
 
       describe "after visiting another page" do
 	before { click_link 'Home' }
-	it { should_not have_selector('div.alert.alert-error') }
+#	it { should_not have_selector('div.alert.alert-error') }
+	it { should have_error_message('Invalid') }
       end
     end
 
     describe "with valid information" do
       let(:user) { FactoryGirl.create(:user) }
       before do
-        fill_in 'Email', with: user.email.upcase
-        fill_in 'Password', with: user.password
-        click_button 'Sign in'
+	fill_in "Email",    with: user.email
+	fill_in "Password", with: user.password
+	click_button "Sign in"
       end
 
       it { should have_title(user.name) }
