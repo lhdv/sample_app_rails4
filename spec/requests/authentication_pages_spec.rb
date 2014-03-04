@@ -13,7 +13,10 @@ describe "AuthenticationPages" do
 
     describe "with invalid information" do
       before { click_button 'Sign in'  }
+
       it { should have_selector('div.alert.alert-error') }
+      it { should_not have_link('Profile') }
+      it { should_not have_link('Settings') }
 
       describe "after visiting another page" do
 	before { click_link 'Home' }
@@ -77,7 +80,6 @@ describe "AuthenticationPages" do
 	  end
 	end
       end
-
     end
 
     describe "as a wrong user" do
@@ -106,6 +108,13 @@ describe "AuthenticationPages" do
 
       describe "submitting a DELETE request to the Users#destroy action" do
 	before { delete user_path(user) }
+	specify { expect(response).to redirect_to(root_url) }
+      end
+
+      describe "submitting a GET request to the Users#new action" do
+	before { get new_user_path }
+
+	specify { expect(response.body).not_to match(full_title('Sign up')) }
 	specify { expect(response).to redirect_to(root_url) }
       end
     end
